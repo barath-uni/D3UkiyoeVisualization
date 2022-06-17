@@ -6,12 +6,18 @@
             href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
         />
 
-        <!-- D3.js CDN source -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://d3js.org/d3.v5.min.js"></script>
-        <script src="https://momentjs.com/downloads/moment.js"></script>
 
-        <!-- custom css & js files -->
+        <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-dispatch@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-ease@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-selection@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-timer@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-transition@3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/d3-drag@3"></script>
+
         <link rel="stylesheet" href="static/css/style.css" />
     </head>
 
@@ -20,31 +26,27 @@
             <h1>Visualization of the Floating World</h1>
         </div>
         <div class="app">
-            <div class="row" style="height: 50%">
+            <div class="row" style="height: 55%">
+                <div class="col col-3"></div>
                 <div class="col col-3">
-
-				</div>
-                <div class="col col-3">
-
-				</div>
-                <div class="col col-3">
-					
-				</div>
+                    <div id="imageView"></div>
+                </div>
+                <div class="col col-3"></div>
             </div>
-            <div class="row" style="height: 40%">
+            <div class="row" style="height: 30%">
                 <div class="col col-1">
-					<div id="scatter"></div>
-				</div>
+                    <div id="scatterView"></div>
+                </div>
             </div>
-            <div class="row" style="height: 10%">
+            <div class="row" style="height: 15%">
                 <div class="col col-1">
-					<div id="timeline"></div>
-				</div>
+                    <div id="timelineView"></div>
+                </div>
             </div>
         </div>
 
-        <!--Plugin JavaScript file-->
         <script type="text/javascript" src="static/js/dashboard.js"></script>
+        <script type="text/javascript" src="static/js/image.js"></script>
         <script type="text/javascript" src="static/js/scatter.js"></script>
         <script type="text/javascript" src="static/js/timeline.js"></script>
     </body>

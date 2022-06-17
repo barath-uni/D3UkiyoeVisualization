@@ -1,47 +1,80 @@
-const timelineWidth = $("#timeline").width();
-const timelineHeight = $("#timeline").height();
+const scattereWidth = $("#scatterView").width();
+const scatterHeight = $("#scatterView").height();
 
-var svg = d3
-    .select("#timeline")
+d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
+        this.parentNode.appendChild(this);
+    });
+};
+
+var scatterSvg = d3
+    .select("#scatterView")
     .append("svg")
-    .attr("width", timelineWidth)
-    .attr("height", timelineHeight)
+    .attr("width", scattereWidth)
+    .attr("height", scatterHeight)
     .append("g");
 
-var data = [];
-for (i = 1650; i < 2011; i++) {
-    data.push({ x: i, y: Math.floor(Math.random() * 250) });
+var scatterX = d3
+    .scaleLinear()
+    .domain([0, 1])
+    .range([30, scattereWidth - 30]);
+
+var scatterY = d3
+    .scaleLinear()
+    .domain([0, 1])
+    .range([30, scatterHeight - 30]);
+
+function updateScatter() {
+    var scatterData = [];
+    const nData = Math.floor(Math.random() * 240) + 10;
+
+    for (i = 0; i < nData; i++) {
+        scatterData.push({ x: Math.random(), y: Math.random() });
+    }
+
+    scatterSvg
+        .selectAll("image")
+        // .transition()
+        // .duration(600)
+        // .attr("x", scatterX(0.5))
+        // .attr("y", scatterY(0.5))
+        .remove();
+
+    scatterSvg
+        .selectAll("image")
+        .data(scatterData)
+        .enter()
+        .append("image")
+        .attr("width", 20)
+        .attr("xlink:href", "static/images/test.png")
+        .attr("x", scatterX(0.5))
+        .attr("y", scatterY(0.5))
+        .attr("style", "opacity: 0")
+        .on("mouseover", function () {
+            d3.select(this)
+                .moveToFront()
+                .transition()
+                .duration(200)
+                .attr("transform", "translate(-60, -60)")
+                .attr("width", 180);
+        })
+        .on("mouseout", function () {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("transform", "translate(0, 0)")
+                .attr("width", 20);
+        })
+        .transition()
+        .duration(200)
+        .delay(200)
+        .attr("x", function (d) {
+            return scatterX(d.x) - 10;
+        })
+        .attr("y", function (d) {
+            return scatterY(d.y) - 10;
+        })
+        .attr("style", "opacity: 1");
 }
 
-var x = d3
-    .scaleBand()
-    .range([0, timelineWidth])
-    .domain(
-        data.map(function (d) {
-            return d.x;
-        })
-    );
-
-var y = d3.scaleLinear().domain([0, 250]).range([0, timelineHeight]);
-
-svg.selectAll("bar")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", function (d) {
-        return x(d.x);
-    })
-    .attr("y", function (d) {
-        return y(d.y);
-    })
-    .attr("width", x.bandwidth())
-    .attr("height", function (d) {
-        return timelineHeight - y(d.y);
-    })
-    .attr("fill", "green");
-
-// svg.append("circle")
-//     .style("fill", "red")
-//     .attr("r", 5)
-//     .attr("cx", x(1800))
-//     .attr("cy", y(0));
+updateScatter();
