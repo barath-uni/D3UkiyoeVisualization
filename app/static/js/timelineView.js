@@ -22,7 +22,10 @@ var timelineX = d3
         })
     );
 
-var timelineY = d3.scaleLinear().domain([0, 250]).range([60, timelineHeight]);
+var timelineY = d3
+    .scaleLinear()
+    .domain([0, 250])
+    .range([60, timelineHeight - 25]);
 
 function updateTimeline() {
     timelineSvg.selectAll("rect").remove();
@@ -31,10 +34,10 @@ function updateTimeline() {
         .data(data)
         .enter()
         .append("rect")
-        .style("stroke", "black")
+        .style("stroke", backgroundColor)
         .style("stroke-width", 1)
         .attr("x", function (d) {
-            return timelineX(d.x) - 0.5 * timelineX.bandwidth();
+            return timelineX(d.x);
         })
         .attr("y", function (d) {
             return timelineY(d.y);
@@ -44,34 +47,65 @@ function updateTimeline() {
             return timelineHeight - timelineY(d.y);
         })
         .attr("fill", function (d) {
-            if (d.x < selectedDate) return "red";
-            else if (d.x == selectedDate) return "blue";
-            return "green";
+            if (d.x == selectedDate) return secondaryColor;
+            return primaryColor;
+        })
+        .style("opacity", function (d) {
+            if (d.x < selectedDate) return 0.6;
+            return 1;
         });
+}
+
+eraDates = [1650, 1740, 1780, 1800, 1870, 1910, 1940, 2010];
+
+for (i = 1; i < eraDates.length - 1; i++) {
+    timelineSvg
+        .append("line")
+        .style("stroke", secondaryColor)
+        .style("stroke-width", 3)
+        .attr("x1", timelineX(eraDates[i]))
+        .attr("y1", timelineY(0) - 20)
+        .attr("x2", timelineX(eraDates[i]))
+        .attr("y2", timelineY(0));
+
+    const xCenter = (eraDates[i] + eraDates[i + 1]) * 0.5;
+    console.log(xCenter)
+
+    timelineSvg
+        .append("text")
+        .style("fill", secondaryColor)
+        .attr("class", "svg-text")
+        .attr("x", timelineX(xCenter) - 25)
+        .attr("y", timelineY(0))
+        .text(eraDates[i]);
 }
 
 timelineSvg
     .append("line")
-    .style("stroke", "green")
+    .style("stroke", primaryColor)
     .style("stroke-width", 3)
-    .attr("x1", timelineX(1650))
+    .style("opacity", 0.6)
+    .attr("x1", 0)
     .attr("y1", timelineY(0) - 20)
-    .attr("x2", timelineX(2010))
+    .attr("x2", timelineWidth)
     .attr("y2", timelineY(0) - 20);
 
 timelineSvg
     .append("circle")
-    .style("fill", "red")
+    .style("fill", secondaryColor)
     .attr("r", 10)
     .attr("cx", timelineX(selectedDate))
     .attr("cy", timelineY(0) - 20);
 
-timelineSvg.append("text").style("fill", "white").attr("class", "svg-text");
+timelineSvg
+    .append("text")
+    .style("fill", secondaryColor)
+    .attr("class", "svg-text");
 
 function updateTimelineText() {
     timelineSvg
         .select("text")
-        .attr("x", timelineX(selectedDate) - 20)
+        .attr("x", timelineX(selectedDate) - 25)
         .attr("y", timelineY(0) - 40)
         .text(function () {
             return selectedDate;
@@ -80,13 +114,16 @@ function updateTimelineText() {
 
 const dragHandler = d3
     .drag()
+    .on("start", function (e) {
+        emptyScatter();
+    })
     .on("drag", function (e) {
         var eachBand = timelineX.step();
         var index = Math.round(e.x / eachBand);
         selectedDate = timelineX.domain()[index];
 
         d3.select(this).attr("cx", function () {
-            return timelineX(selectedDate);
+            return timelineX(selectedDate) + 0.5 * timelineX.bandwidth();
         });
 
         updateTimeline();
@@ -94,7 +131,6 @@ const dragHandler = d3
     })
     .on("end", function (e) {
         updateScatter();
-        updateImageView();
     });
 
 dragHandler(timelineSvg.select("circle"));
