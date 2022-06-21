@@ -2,6 +2,7 @@ import os
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from app import create_app, socketio
+config_name = os.getenv('FLASK_CONFIG') or 'default'
 
 def fix_werkzeug_logging():
     from werkzeug.serving import WSGIRequestHandler
