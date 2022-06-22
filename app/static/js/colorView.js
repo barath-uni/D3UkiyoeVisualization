@@ -1,16 +1,23 @@
-const colorWidth = $("#colorSelect").width();
-const colorHeight = $("#colorSelect").height();
+const colorWidth = $("#colorView").width();
+const colorHeight = $("#colorView").height();
 
 var colorSvg = d3
-    .select("#colorSelect")
+    .select("#colorView")
     .append("svg")
     .attr("width", colorWidth)
     .attr("height", colorHeight)
     .append("g");
 
 function colorCardClick(newImage) {
+    $(".prev-selected-card").removeClass("prev-selected-card");
+    $(`#colorCard${selectedImageId}`).addClass("prev-selected-card");
+
     selectedImageId = newImage;
     updateImageView();
+    updateColorView();
+
+    $(".selected-card").removeClass("selected-card");
+    $(`#colorCard${newImage}`).addClass("selected-card");
 }
 
 function updateColorView() {
@@ -35,27 +42,53 @@ function updateColorView() {
 
     var data_ready = pie(d3.entries(colorData));
 
-    colorSvg.selectAll("path").remove();
+    colorSvg.selectAll(".prev-color-wheel").remove();
     colorSvg
-        .selectAll("path")
-        .data(data_ready)
-        .enter()
-        .append("path")
-        .attr("d", d3.arc().innerRadius(60).outerRadius(120))
-        .attr("fill", function (d) {
-            return color(d.data.key);
-        })
-        .attr("stroke", backgroundColor)
-        .style("stroke-width", "2px")
-        .style("opacity", 0.8)
-        .attr("transform", `translate(${colorWidth - 140} ${colorHeight / 2})`)
+        .selectAll(".cur-color-wheel")
+        .attr("class", "prev-color-wheel")
         .on("mouseover", function () {
             d3.select(this)
                 .transition()
                 .duration(200)
                 .attr(
                     "transform",
-                    `translate(${colorWidth - 140} ${
+                    `translate(${90} ${colorHeight / 2}) scale(1.1)`
+                );
+        })
+        .on("mouseout", function () {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr(
+                    "transform",
+                    `translate(${90} ${colorHeight / 2}) scale(1)`
+                );
+        })
+        .transition()
+        .duration(200)
+        .attr("transform", `translate(${90} ${colorHeight / 2})`);
+
+    colorSvg
+        .selectAll(".cur-color-wheel")
+        .data(data_ready)
+        .enter()
+        .append("path")
+        .attr("class", "cur-color-wheel")
+        .attr("d", d3.arc().innerRadius(40).outerRadius(80))
+        .attr("fill", function (d) {
+            return color(d.data.key);
+        })
+        .attr("stroke", backgroundColor)
+        .style("stroke-width", "2px")
+        .style("opacity", 0)
+        .attr("transform", `translate(${colorWidth - 90} ${colorHeight / 2})`)
+        .on("mouseover", function () {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr(
+                    "transform",
+                    `translate(${colorWidth - 90} ${
                         colorHeight / 2
                     }) scale(1.1)`
                 );
@@ -66,10 +99,16 @@ function updateColorView() {
                 .duration(200)
                 .attr(
                     "transform",
-                    `translate(${colorWidth - 140} ${colorHeight / 2}) scale(1)`
+                    `translate(${colorWidth - 90} ${colorHeight / 2}) scale(1)`
                 );
-        });
+        })
+        .transition()
+        .delay(200)
+        .duration(200)
+        .style("opacity", 1);
+}
 
+function updateColorSimilars() {
     $("#colorSimilars")
         .children()
         .fadeOut()
@@ -81,7 +120,7 @@ function updateColorView() {
                 const newImageId = Math.floor(Math.random() * 170000);
 
                 $("#colorSimilars").append(`
-                    <div class="similar-card similar-card-left" onClick=colorCardClick(${newImageId})>
+                    <div id="colorCard${newImageId}" class="similar-card similar-card-left" onClick=colorCardClick(${newImageId})>
                         <div class="similar-card-thumb">
                             <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${newImageId}.jpg">
                         </div>
@@ -95,5 +134,3 @@ function updateColorView() {
             }
         });
 }
-
-updateColorView();

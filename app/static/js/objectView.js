@@ -1,8 +1,12 @@
 function objectCardClick(newImage) {
     selectedImageId = newImage;
+    updateImageView();
     resetObjectFocus();
     updateColorView();
-    updateImageView();
+    updateColorSimilars();
+
+    $(".selected-card").removeClass("selected-card");
+    $(`#objectCard${newImage}`).addClass("selected-card");
 }
 
 function resetObjectFocus() {
@@ -44,7 +48,7 @@ function updateObjectView() {
                 const newImageId = Math.floor(Math.random() * 170000);
 
                 $("#objectSimilars").append(`
-                    <div class="similar-card similar-card-right" onClick=objectCardClick(${newImageId})>
+                    <div id="objectCard${newImageId}" class="similar-card similar-card-right" onClick=objectCardClick(${newImageId})>
                         <div class="similar-card-thumb">
                             <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${newImageId}.jpg">
                         </div>

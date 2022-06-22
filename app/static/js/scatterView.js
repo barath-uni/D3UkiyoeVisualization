@@ -41,7 +41,9 @@ function createGlyph(svgCanvas, glyphData) {
         .attr(
             "transform",
             `translate(${glyphData.x} ${glyphData.y}) scale(0.1)`
-        );
+        )
+        .attr("x", glyphData.x)
+        .attr("y", glyphData.y);
 
     glyph.select(".glyph").data(glyphData).enter();
 
@@ -129,11 +131,23 @@ function createGlyph(svgCanvas, glyphData) {
 
     glyph
         .on("click", function () {
+            svgCanvas.selectAll(".selected-glyph").attr("class", "glyph");
+            // .attr(
+            //     "transform",
+            //     `translate(${glyphData.x} ${glyphData.y}) scale(0.1)`
+            // );
+
+            d3.select(this).attr("class", "glyph selected-glyph");
+            // .attr(
+            //     "transform",
+            //     `translate(${glyphData.x} ${glyphData.y}) scale(0.3)`
+            // );
+
             selectedImageId = glyphData.imageId;
             updateImageView();
             resetObjectFocus();
             updateColorView();
-            // resetColorFocus();
+            updateColorSimilars();
         })
         .on("mouseover", function () {
             d3.select(this)

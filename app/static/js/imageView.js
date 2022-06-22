@@ -128,5 +128,3 @@ function updateImageView() {
         .duration(200)
         .style("fill-opacity", 0.2);
 }
-
-updateImageView();
