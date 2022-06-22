@@ -1,6 +1,12 @@
 function objectCardClick(newImage) {
-    selectedImage = newImage;
+    selectedImageId = newImage;
+    resetObjectFocus();
+    updateColorView();
     updateImageView();
+}
+
+function resetObjectFocus() {
+    $("#objectStats").removeClass("popout-right");
 }
 
 function updateObjectView() {
@@ -12,8 +18,14 @@ function updateObjectView() {
     `
     );
 
-    $("#objectStats").css("background-image", "url(static/images/test.png)");
+    const paneId = Math.floor(Math.random() * 170000);
 
+    $("#objectStats").css(
+        "background-image",
+        `url(https://storage.googleapis.com/ukiyoe-dataset/images/${paneId}.jpg`
+    );
+
+    $("#objectStats").addClass("popout-right");
     $("#objectSimilarsTitle").animate(
         {
             color: primaryColor,
@@ -21,18 +33,28 @@ function updateObjectView() {
         500
     );
 
-    for (i = 0; i < 100; i++) {
-        $("#objectSimilars").append(`
-            <div class="similar-card" onClick=objectCardClick(0)>
-                <div class="similar-card-thumb">
-                    <img src="static/images/test2.png">
-                </div>
-                <div class="similar-card-text">
-                    <p><b>Title</b>: Some Title</p>
-                    <p><b>Artist</b>: Some Artist</p>
-                    <p><b>Time</b>: Some Year, Period</p>
-                </div>
-            </div>
-        `);
-    }
+    $("#objectSimilars")
+        .children()
+        .fadeOut()
+        .promise()
+        .done(function () {
+            $("#objectSimilars").empty();
+
+            for (i = 0; i < 25; i++) {
+                const newImageId = Math.floor(Math.random() * 170000);
+
+                $("#objectSimilars").append(`
+                    <div class="similar-card similar-card-right" onClick=objectCardClick(${newImageId})>
+                        <div class="similar-card-thumb">
+                            <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${newImageId}.jpg">
+                        </div>
+                        <div class="similar-card-text">
+                            <p><b>Title</b>: Some Title</p>
+                            <p><b>Artist</b>: Some Artist</p>
+                            <p><b>Time</b>: Some Year, Period</p>
+                        </div>
+                    </div>
+                `);
+            }
+        });
 }

@@ -69,7 +69,6 @@ for (i = 1; i < eraDates.length - 1; i++) {
         .attr("y2", timelineY(0));
 
     const xCenter = (eraDates[i] + eraDates[i + 1]) * 0.5;
-    console.log(xCenter)
 
     timelineSvg
         .append("text")

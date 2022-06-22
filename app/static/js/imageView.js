@@ -9,23 +9,26 @@ var imageSvg = d3
     .attr("height", imageHeight)
     .append("g");
 
-imageWidth -= 28 * 2;
-imageHeight -= 28 * 2;
+imageWidth -= 1 * em2px;
+imageHeight -= 1 * em2px;
 
 imageSvg.append("image").attr("width", imageWidth).attr("height", imageHeight);
 
 function updateImageView() {
     imageSvg
         .select("image")
-        .transition()
-        .duration(200)
-        .attr("xlink:href", "static/images/test2.png");
+        // .transition()
+        // .duration(200)
+        .attr(
+            "xlink:href",
+            `https://storage.googleapis.com/ukiyoe-dataset/images/${selectedImageId}.jpg`
+        );
 
     var boxData = [];
     const nData = Math.floor(Math.random() * 4);
 
-    const origImageWidth = 800;
-    const origImageHeight = 398;
+    const origImageWidth = imageWidth;
+    const origImageHeight = imageHeight;
     const origImageRatio = origImageWidth / origImageHeight;
 
     var rescaleWidth = 0;
@@ -101,8 +104,8 @@ function updateImageView() {
                     selectedObjectData.x + rescaleX + selectedObjectData.width
                 )
                 .attr("y1", selectedObjectData.y + rescaleY)
-                .attr("x2", imageWidth + 28 * 2)
-                .attr("y2", 4);
+                .attr("x2", imageWidth + em2px - 7)
+                .attr("y2", 7);
 
             imageSvg
                 .append("line")
@@ -116,8 +119,8 @@ function updateImageView() {
                     "y1",
                     selectedObjectData.y + rescaleY + selectedObjectData.height
                 )
-                .attr("x2", imageWidth + 28 * 2)
-                .attr("y2", imageHeight + 28 * 2 - 4);
+                .attr("x2", imageWidth + em2px)
+                .attr("y2", imageHeight + em2px);
 
             updateObjectView();
         })
