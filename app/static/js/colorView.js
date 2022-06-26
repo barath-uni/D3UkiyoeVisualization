@@ -27,20 +27,33 @@ function updateColorView() {
         },
         500
     );
+console.log("COLOR VIEW UPDATE BEFORE")
+//    Update here with the callback
+update_color_view(selectedImageId, colorViewCallback)
+}
 
-    var colorData = {};
+function colorViewCallback(colorData) {
+    console.log("COLOR VIEW UPDATE CALLBACK")
+    console.log(colorData)
+    var nData = Object.keys(colorData).length
+    console.log("Length of color objects", nData)
     var colors = [];
-    for (i = 0; i < 10; i++) {
-        colorData[i] = Math.random();
-        colors.push("#" + Math.floor(Math.random() * 16777215).toString(16));
+    var i = 0;
+    var colorInfo = {};
+    for (color in colorData) {
+        console.log(colorData[color])
+        colorInfo[i] = parseInt(colorData[color]['%_dominance'])/100;
+        colors.push(colorData[color]['HEX']);
+        i++;
     }
 
-    var color = d3.scaleOrdinal().domain(colorData).range(colors);
+    console.log("COLORS", colorInfo, colors)
+    var color = d3.scaleOrdinal().domain(colorInfo).range(colors);
     var pie = d3.pie().value(function (d) {
         return d.value;
     });
 
-    var data_ready = pie(d3.entries(colorData));
+    var data_ready = pie(d3.entries(colorInfo));
 
     colorSvg.selectAll(".prev-color-wheel").remove();
     colorSvg
@@ -108,6 +121,7 @@ function updateColorView() {
         .style("opacity", 1);
 }
 
+// TODO: Does this need a new json?
 function updateColorSimilars() {
     $("#colorSimilars")
         .children()

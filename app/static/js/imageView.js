@@ -36,9 +36,10 @@ function updateImageView(img_path=null) {
 }
 
 function updateDetectedObjects(detected_object_info) {
+console.log(detected_object_info)
 var boxData = [];
 //    Replace with a datacall
-const nData = detected_object_info.length;
+const nData = Object.keys(detected_object_info).length;
 console.log("number of data", nData)
 const origImageWidth = imageWidth;
 const origImageHeight = imageHeight;
@@ -58,19 +59,19 @@ if (imageRatio > origImageRatio) {
 var rescaleX = 0.5 * (imageWidth - rescaleWidth);
 var rescaleY = 0.5 * (imageHeight - rescaleHeight);
 
-for (i = 0; i < nData; i++) {
-    object_rect = detected_object_info[i]['object-rectangle'].split(", ")
+for (pane in detected_object_info) {
+    object_rect = detected_object_info[pane]
     console.log("object_rect", object_rect)
-    var xmin = parseFloat(object_rect[0]);
-    var ymin = parseFloat(object_rect[1]);
-    var xmax = parseFloat(object_rect[2]);
-    var ymax = parseFloat(object_rect[3]);
+    var xmin = parseFloat(object_rect['xmin']);
+    var ymin = parseFloat(object_rect['ymin']);
+    var xmax = parseFloat(object_rect['xmax']);
+    var ymax = parseFloat(object_rect['ymax']);
     boxData.push({
         x: xmin * 0.8,
         y: ymin * 0.8,
         width: (xmax - xmin) * 0.5,
         height: (ymax - ymin) * 0.5,
-        objectId: i,
+        objectId: pane,
     });
 }
 
@@ -107,7 +108,7 @@ imageSvg
     .on("click", function (d) {
         const selectedObjectData = d3.select(this).data()[0];
         selectedObject = selectedObjectData.objectId;
-
+        console.log("selectedObject",selectedObjectData)
         imageSvg.selectAll("line").remove();
         imageSvg
             .append("line")
@@ -136,7 +137,7 @@ imageSvg
             .attr("x2", imageWidth + em2px)
             .attr("y2", imageHeight + em2px);
 
-        updateObjectView();
+        updateObjectView(selectedObject);
     })
     .transition()
     .duration(200)

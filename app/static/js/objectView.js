@@ -13,7 +13,7 @@ function resetObjectFocus() {
     $("#objectStats").removeClass("popout-right");
 }
 
-function updateObjectView() {
+function updateObjectView(paneId) {
     $("#objectStats").html(
         `
         <div class='text-container'>
@@ -21,8 +21,8 @@ function updateObjectView() {
         </div>
     `
     );
-//    No method as of now to collect the paneId. Have to wait
-    const paneId = Math.floor(Math.random() * 170000);
+
+//    const paneId = Math.floor(Math.random() * 170000);
     console.log("PaneID is", paneId)
 
     $("#objectStats").css(
@@ -38,6 +38,8 @@ function updateObjectView() {
         500
     );
 
+// TODO, change the below "newImageId" to adapt for the pane_id's. Can change once done
+// TODO (Cannot judge how the json will be at the moment, so pausing the change here)
     $("#objectSimilars")
         .children()
         .fadeOut()
