@@ -26,3 +26,34 @@ def get_image_from_key():
     id = request.args.get("idx")
     img_name = get_data_by_id(id)['img']
     return send_from_directory("data/images", img_name)
+
+
+@main.route('/object_detection', methods=['GET'])
+def get_object_detection_data():
+    id = request.args.get("idx")
+    val = f"{id}.jpg" if '.jpg' not in id else id
+    print(f"VAL VAL = {val}")
+    img_name = get_all_data_keyval(key='img-name', val=val, file_name=OBJECT_DETECTION)
+    return jsonify(data=img_name)
+
+
+@main.route('/color_information', methods=['GET'])
+def get_color_profile_data():
+    id = request.args.get("idx")
+    img_name = get_data_by_id(id)['img']
+    return send_from_directory("data/images", img_name)
+
+
+@main.route('/scatter_plot', methods=['GET'])
+def get_scatter_plot_data():
+    id = request.args.get("idx")
+    img_name = get_data_by_id(id)['img']
+    return send_from_directory("data/images", img_name)
+
+
+@main.route('/timeline_data', methods=['GET'])
+def get_timeline_data():
+    id = request.args.get("idx")
+    img_name = get_data_by_id(id)['img']
+    return send_from_directory("data/images", img_name)
+

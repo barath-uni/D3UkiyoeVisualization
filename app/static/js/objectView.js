@@ -21,8 +21,9 @@ function updateObjectView() {
         </div>
     `
     );
-
+//    No method as of now to collect the paneId. Have to wait
     const paneId = Math.floor(Math.random() * 170000);
+    console.log("PaneID is", paneId)
 
     $("#objectStats").css(
         "background-image",
