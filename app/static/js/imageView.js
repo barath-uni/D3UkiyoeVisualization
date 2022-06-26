@@ -14,14 +14,21 @@ imageHeight -= 1 * em2px;
 
 imageSvg.append("image").attr("width", imageWidth).attr("height", imageHeight);
 
-function updateImageView() {
+function updateImageView(img_path=null) {
+    if (!img_path){
+    img_path=`https://storage.googleapis.com/ukiyoe-dataset/images/${selectedImageId}.jpg`
+    }
+    else{
+    img_path = `https://storage.googleapis.com/ukiyoe-dataset/images/${img_path}.jpg`
+    }
+    console.log("INSIDE UPDATE VIEW")
     imageSvg
         .select("image")
         // .transition()
         // .duration(200)
         .attr(
             "xlink:href",
-            `https://storage.googleapis.com/ukiyoe-dataset/images/${selectedImageId}.jpg`
+            `${img_path}`
         );
 
     var boxData = [];
