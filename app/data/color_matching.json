@@ -1,0 +1,33 @@
+{
+    "0": {
+        "color_1": {
+            "HEX": "#99ff22",
+            "%_dominance": "10"
+        },
+        "color_2": {
+            "HEX": "#99ff22",
+            "%_dominance": "40"
+        },
+        "color_3": {
+            "HEX": "#99ff22",
+            "%_dominance": "10"
+        }
+
+    },
+    
+    "1": {
+        "color_1": {
+            "HEX": "#99ff22",
+            "%_dominance": "10"
+        },
+        "color_2": {
+            "HEX": "#99ff22",
+            "%_dominance": "40"
+        },
+        "color_3": {
+            "HEX": "#99ff22",
+            "%_dominance": "10"
+        }
+
+    }
+}
