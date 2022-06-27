@@ -4,6 +4,8 @@ import os
 import json
 from typing import AnyStr
 COLOR_MATCHING = "app/data/color_matching.json"
+OBJECT_DETECTION_PANES = "app/data/total_panes.json"
+OBJECT_DETECTION_MATCHES = "app/data/matches.json"
 OBJECT_DETECTION = "app/data/object_detection.json"
 DATE_SLIDER = "app/data/date_slider.json"
 IMAGE_METADATA = "app/data/color_matching.json"
@@ -59,5 +61,6 @@ def get_all_data_keyval(keys:AnyStr, file_name=COLOR_MATCHING):
 
 
 #
+#
 # if __name__ == '__main__':
-#     print(get_all_data_keyval("0/color_1/HEX"))
+#     print(get_data_by_id("0", OBJECT_DETECTION_PANES))

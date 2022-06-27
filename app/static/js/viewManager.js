@@ -9,9 +9,20 @@ fetch(fetch_url)
 });
 }
 
-// Makes call to 'object_detection' endpoint
+// Makes call to 'object_detection' endpoint. 1. all the panes for given id, 2. list of matches for given id
 function get_detected_objects(id, _callback) {
-var fetch_url = '/object_detection?idx=0';
+var fetch_url = '/object_detection_panes?idx=0';
+console.log(fetch_url)
+fetch(fetch_url)
+    .then(function(response) {return response.json()})
+    .then((res_data) => {
+        console.log("Response data from get detected objects", res_data)
+        handle_callback(res_data, _callback)
+});
+}
+
+function get_detected_matches(id, _callback) {
+var fetch_url = '/object_detection_matches?idx=0';
 console.log(fetch_url)
 fetch(fetch_url)
     .then(function(response) {return response.json()})

@@ -28,10 +28,18 @@ def get_image_from_key():
     return send_from_directory("data/images", img_name)
 
 
-@main.route('/object_detection', methods=['GET'])
-def get_object_detection_data():
+@main.route('/object_detection_panes', methods=['GET'])
+def get_object_detection_panes():
     id = request.args.get("idx")
-    resp = get_data_by_id(id,file_name=OBJECT_DETECTION)
+    resp = get_data_by_id(id, file_name=OBJECT_DETECTION_PANES)
+    # For now returning it as a list
+    return jsonify(data=resp)
+
+
+@main.route('/object_detection_matches', methods=['GET'])
+def get_object_detection_matches():
+    id = request.args.get("idx")
+    resp = get_data_by_id(id, file_name=OBJECT_DETECTION_MATCHES)
     return jsonify(data=resp)
 
 
@@ -62,7 +70,7 @@ def get_scatter_plot_data():
 def get_timeline_data():
     id = request.args.get("idx")
     print(f"VAL VAL = {id}")
-    resp = get_data_by_id(id,file_name=DATE_SLIDER)
+    resp = get_data_by_id(id, file_name=DATE_SLIDER)
     return jsonify(data=resp)
 
 

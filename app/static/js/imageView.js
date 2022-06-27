@@ -38,8 +38,9 @@ function updateImageView(img_path=null) {
 function updateDetectedObjects(detected_object_info) {
 console.log(detected_object_info)
 var boxData = [];
-//    Replace with a datacall
-const nData = Object.keys(detected_object_info).length;
+//  Temporarily setting to 1, change later
+//const nData = Object.keys(detected_object_info).length;
+const nData = 1;
 console.log("number of data", nData)
 const origImageWidth = imageWidth;
 const origImageHeight = imageHeight;
@@ -59,21 +60,22 @@ if (imageRatio > origImageRatio) {
 var rescaleX = 0.5 * (imageWidth - rescaleWidth);
 var rescaleY = 0.5 * (imageHeight - rescaleHeight);
 
-for (pane in detected_object_info) {
-    object_rect = detected_object_info[pane]
-    console.log("object_rect", object_rect)
-    var xmin = parseFloat(object_rect['xmin']);
-    var ymin = parseFloat(object_rect['ymin']);
-    var xmax = parseFloat(object_rect['xmax']);
-    var ymax = parseFloat(object_rect['ymax']);
-    boxData.push({
-        x: xmin * 0.8,
-        y: ymin * 0.8,
-        width: (xmax - xmin) * 0.5,
-        height: (ymax - ymin) * 0.5,
-        objectId: pane,
-    });
-}
+//for (var pane=0;pane<nData;pane++) {
+//object_rect = detected_object_info[pane]
+object_rect = detected_object_info
+console.log("object_rect", object_rect)
+var xmin = parseFloat(object_rect['xmin']);
+var ymin = parseFloat(object_rect['ymin']);
+var xmax = parseFloat(object_rect['xmax']);
+var ymax = parseFloat(object_rect['ymax']);
+boxData.push({
+    x: xmin * 0.8,
+    y: ymin * 0.8,
+    width: (xmax - xmin) * 0.5,
+    height: (ymax - ymin) * 0.5,
+    objectId: object_rect['pane_id'],
+});
+//}
 
 imageSvg.selectAll("rect").remove();
 imageSvg.selectAll("line").remove();
