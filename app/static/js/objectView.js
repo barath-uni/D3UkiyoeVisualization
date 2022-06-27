@@ -37,9 +37,12 @@ function updateObjectView(paneId) {
         },
         500
     );
+    update_detected_matches(paneId, objectViewCallback)
+}
 
-// TODO, change the below "newImageId" to adapt for the pane_id's. Can change once done
-// TODO (Cannot judge how the json will be at the moment, so pausing the change here)
+function objectViewCallback(matchesData) {
+    total_matches = matchesData['matches_ids']
+    match_values = matchesData['matches_values']
     $("#objectSimilars")
         .children()
         .fadeOut()
@@ -47,21 +50,33 @@ function updateObjectView(paneId) {
         .done(function () {
             $("#objectSimilars").empty();
 
-            for (i = 0; i < 25; i++) {
-                const newImageId = Math.floor(Math.random() * 170000);
+            for (i = 0; i < total_matches.length; i++) {
+                const newImageId = total_matches[i];
+//                At present no use for Match Value, but can be included
+                console.log("Match Value = ", match_values[i])
+                update_meta_data(newImageId, objectMetaDataCallback)
+            }
+        });
 
-                $("#objectSimilars").append(`
-                    <div id="objectCard${newImageId}" class="similar-card similar-card-right" onClick=objectCardClick(${newImageId})>
+}
+
+function objectMetaDataCallback(metaData) {
+    imageId = metaData['id']
+    title = metaData['title']
+    artist = metaData['artist']
+    time = metaData['time']
+    $("#objectSimilars").append(`
+                    <div id="objectCard${imageId}" class="similar-card similar-card-right" onClick=objectCardClick(${imageId})>
                         <div class="similar-card-thumb">
-                            <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${newImageId}.jpg">
+                            <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${imageId}.jpg">
                         </div>
                         <div class="similar-card-text">
-                            <p><b>Title</b>: Some Title</p>
-                            <p><b>Artist</b>: Some Artist</p>
-                            <p><b>Time</b>: Some Year, Period</p>
+                            <p><b>Title</b>: ${title}</p>
+                            <p><b>Artist</b>: ${artist}</p>
+                            <p><b>Time</b>: ${time}</p>
                         </div>
                     </div>
                 `);
-            }
-        });
+
+
 }

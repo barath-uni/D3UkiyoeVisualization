@@ -21,8 +21,8 @@ fetch(fetch_url)
 });
 }
 
-function get_detected_matches(id, _callback) {
-var fetch_url = '/object_detection_matches?idx=0';
+function update_detected_matches(id, _callback) {
+var fetch_url = '/object_detection_matches?idx=14';
 console.log(fetch_url)
 fetch(fetch_url)
     .then(function(response) {return response.json()})
@@ -39,7 +39,7 @@ console.log(fetch_url)
 fetch(fetch_url)
     .then(function(response) {return response.json()})
     .then((res_data) => {
-        console.log("Response data from get detected objects", res_data)
+        console.log("Response data from Update MetaData", res_data)
         handle_callback(res_data, _callback)
 });
 }
@@ -57,6 +57,20 @@ fetch(fetch_url)
         handle_callback(res_data, _callback)
 });
 }
+
+// Updates the _callback with the slider/date data
+function update_slider_view(id, _callback) {
+id = 0;
+var fetch_url = '/timeline_data?idx='+id;
+console.log(fetch_url)
+fetch(fetch_url)
+    .then(function(response) {return response.json()})
+    .then((res_data) => {
+        console.log("Response data from Timeline", res_data)
+        handle_callback(res_data, _callback)
+});
+}
+
 
 
 

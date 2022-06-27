@@ -7,9 +7,9 @@ var timelineSvg = d3
     .attr("width", timelineWidth)
     .attr("height", timelineHeight)
     .append("g");
-
+// Replace with Bar plot information later
 var data = [];
-for (i = 1650; i < 2011; i++) {
+for (i = 1654; i < 2011; i++) {
     data.push({ x: i, y: Math.floor(Math.random() * 250) });
 }
 

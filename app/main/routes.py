@@ -47,6 +47,8 @@ def get_object_detection_matches():
 def get_meta_data():
     id = request.args.get("idx")
     resp = get_data_by_id(id, file_name=META_DATA)
+    # Hack to ensure that the meta data field also has the image id
+    resp['id'] = id
     return jsonify(data=resp)
 
 
@@ -69,7 +71,6 @@ def get_scatter_plot_data():
 @main.route('/timeline_data', methods=['GET'])
 def get_timeline_data():
     id = request.args.get("idx")
-    print(f"VAL VAL = {id}")
     resp = get_data_by_id(id, file_name=DATE_SLIDER)
     return jsonify(data=resp)
 
