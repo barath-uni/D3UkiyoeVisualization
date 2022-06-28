@@ -71,6 +71,18 @@ fetch(fetch_url)
 });
 }
 
+// Updates the _callback with the timeline distribution data
+function update_timeline_distribution_view(_callback) {
+console.log("BEFOREFETCHING")
+var fetch_url = '/timeline_distribution';
+console.log(fetch_url)
+fetch(fetch_url)
+    .then(function(response) {return response.json()})
+    .then((res_data) => {
+        console.log("Response data from Timeline distribution", res_data)
+        handle_callback(res_data, _callback)
+});
+}
 
 
 

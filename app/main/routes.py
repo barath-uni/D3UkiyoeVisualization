@@ -63,7 +63,6 @@ def get_color_profile_data():
 @main.route('/scatter_plot', methods=['GET'])
 def get_scatter_plot_data():
     id = request.args.get("idx")
-    print(f"VAL VAL = {id}")
     resp = get_data_by_id(id,file_name=SCATTER_PLOT)
     return jsonify(data=resp)
 
@@ -75,3 +74,9 @@ def get_timeline_data():
     return jsonify(data=resp)
 
 
+@main.route('/timeline_distribution', methods=['GET'])
+def get_timeline_distribution():
+    print("READING")
+    resp = read_date_from_json(filename=TIMELINE_DISTRIBUTION)
+    print("FINISHED")
+    return jsonify(data=resp)

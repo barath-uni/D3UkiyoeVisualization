@@ -1,3 +1,4 @@
+console.log("PAGE START")
 const timelineWidth = $("#timelineView").width();
 const timelineHeight = $("#timelineView").height();
 
@@ -7,12 +8,23 @@ var timelineSvg = d3
     .attr("width", timelineWidth)
     .attr("height", timelineHeight)
     .append("g");
-// Replace with Bar plot information later
-var data = [];
-for (i = 1654; i < 2011; i++) {
-    data.push({ x: i, y: Math.floor(Math.random() * 250) });
+//
+console.log("BEFORE UPDATE TIMELINE DISTRIBUTION")
+update_timeline_distribution_view(updateTimeLineDistribution);
+
+function updateTimeLineDistribution(distriData) {
+// Get all the values from the distribution
+var data = Object.keys(distriData).map(key => distriData[key]);
+data = [].concat.apply([], data);
+console.log(data)
+console.log("Distribution Lenght = ", data.length)
+var index = 0;
+for (i = 1654; i < data.length; i++) {
+    data.push({ x: i, y: (data[index]+1)*10 });
+    index++;
 }
 
+console.log("AFTER DATA", data);
 var timelineX = d3
     .scaleBand()
     .range([0, timelineWidth])
@@ -27,34 +39,6 @@ var timelineY = d3
     .domain([0, 250])
     .range([60, timelineHeight - 25]);
 
-function updateTimeline() {
-    timelineSvg.selectAll("rect").remove();
-    timelineSvg
-        .selectAll("rect")
-        .data(data)
-        .enter()
-        .append("rect")
-        .style("stroke", backgroundColor)
-        .style("stroke-width", 1)
-        .attr("x", function (d) {
-            return timelineX(d.x);
-        })
-        .attr("y", function (d) {
-            return timelineY(d.y);
-        })
-        .attr("width", timelineX.bandwidth())
-        .attr("height", function (d) {
-            return timelineHeight - timelineY(d.y);
-        })
-        .attr("fill", function (d) {
-            if (d.x == selectedDate) return secondaryColor;
-            return primaryColor;
-        })
-        .style("opacity", function (d) {
-            if (d.x < selectedDate) return 0.6;
-            return 1;
-        });
-}
 
 eraDates = [1650, 1740, 1780, 1800, 1870, 1910, 1940, 2010];
 
@@ -101,15 +85,6 @@ timelineSvg
     .style("fill", secondaryColor)
     .attr("class", "svg-text");
 
-function updateTimelineText() {
-    timelineSvg
-        .select("text")
-        .attr("x", timelineX(selectedDate) - 25)
-        .attr("y", timelineY(0) - 40)
-        .text(function () {
-            return selectedDate;
-        });
-}
 
 const dragHandler = d3
     .drag()
@@ -136,3 +111,45 @@ dragHandler(timelineSvg.select("circle"));
 
 updateTimeline();
 updateTimelineText();
+
+}
+
+function updateTimeline() {
+    timelineSvg.selectAll("rect").remove();
+    timelineSvg
+        .selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .style("stroke", backgroundColor)
+        .style("stroke-width", 1)
+        .attr("x", function (d) {
+            return timelineX(d.x);
+        })
+        .attr("y", function (d) {
+            return timelineY(d.y);
+        })
+        .attr("width", timelineX.bandwidth())
+        .attr("height", function (d) {
+            return timelineHeight - timelineY(d.y);
+        })
+        .attr("fill", function (d) {
+            if (d.x == selectedDate) return secondaryColor;
+            return primaryColor;
+        })
+        .style("opacity", function (d) {
+            if (d.x < selectedDate) return 0.6;
+            return 1;
+        });
+}
+
+function updateTimelineText() {
+    timelineSvg
+        .select("text")
+        .attr("x", timelineX(selectedDate) - 25)
+        .attr("y", timelineY(0) - 40)
+        .text(function () {
+            return selectedDate;
+        });
+}
+

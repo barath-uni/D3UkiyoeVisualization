@@ -11,6 +11,7 @@ DATE_SLIDER = "app/data/date_features.json"
 IMAGE_METADATA = "app/data/color_matching.json"
 SCATTER_PLOT = "app/data/scatter_plot.json"
 META_DATA = "app/data/img-metadata.json"
+TIMELINE_DISTRIBUTION = "app/data/distr.json"
 
 
 @functools.lru_cache()
@@ -60,7 +61,7 @@ def get_all_data_keyval(keys:AnyStr, file_name=COLOR_MATCHING):
         return {"Error": "Key error"}
 
 
-#
-#
-# if __name__ == '__main__':
-#     print(get_data_by_id("0", OBJECT_DETECTION_PANES))
+
+
+if __name__ == '__main__':
+    print(get_data_by_id("0", DATE_SLIDER))
