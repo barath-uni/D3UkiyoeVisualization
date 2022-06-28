@@ -9,18 +9,27 @@ var timelineSvg = d3
     .attr("height", timelineHeight)
     .append("g");
 //
+var data = [];
+var timelineX = null;
+var timelineY = null;
 console.log("BEFORE UPDATE TIMELINE DISTRIBUTION")
 update_timeline_distribution_view(updateTimeLineDistribution);
 
 function updateTimeLineDistribution(distriData) {
 // Get all the values from the distribution
-var data = Object.keys(distriData).map(key => distriData[key]);
-data = [].concat.apply([], data);
-console.log(data)
-console.log("Distribution Lenght = ", data.length)
+dataValues = Object.keys(distriData).map(key => distriData[key]);
+console.log(dataValues)
+dataVal = [];
+for (val in dataValues){
+console.log(dataValues[val])
+dataVal = dataVal.concat(dataValues[val])
+}
+console.log(dataVal)
+console.log("Distribution Lenght = ", dataVal.length)
 var index = 0;
-for (i = 1654; i < data.length; i++) {
-    data.push({ x: i, y: (data[index]+1)*10 });
+for (i = 1654; i < 2011; i++) {
+    console.log(dataValues[index])
+    data.push({ x: i, y: (dataVal[index]+1)*10 });
     index++;
 }
 
@@ -108,13 +117,13 @@ const dragHandler = d3
     });
 
 dragHandler(timelineSvg.select("circle"));
-
+console.log("Before updateTimeline is called")
 updateTimeline();
 updateTimelineText();
 
-}
 
 function updateTimeline() {
+    console.log("When updateTimeLine is called")
     timelineSvg.selectAll("rect").remove();
     timelineSvg
         .selectAll("rect")
@@ -151,5 +160,7 @@ function updateTimelineText() {
         .text(function () {
             return selectedDate;
         });
+}
+
 }
 
