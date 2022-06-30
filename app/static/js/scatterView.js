@@ -2,6 +2,8 @@ const scattereWidth = $("#scatterView").width();
 const scatterHeight = $("#scatterView").height();
 // const eraRotations = [0, 45, 90, 135, 180];
 
+var selectedGlyph = ""
+
 d3.selection.prototype.moveToFront = function () {
     return this.each(function () {
         this.parentNode.appendChild(this);
@@ -49,13 +51,13 @@ function createGlyph(svgCanvas, glyphData) {
 
     glyph
         .append("image")
-        .attr("x", -50)
-        .attr("y", -50)
-        .attr("width", 100)
-        .attr("height", 100)
+        .attr("x", -70)
+        .attr("y", -70)
+        .attr("width", 140)
+        .attr("height", 140)
         .attr(
             "xlink:href",
-            `https://cocodataset.org/images/cocoicons/${glyphData.objectId}.jpg`
+            `https://storage.googleapis.com/ukiyoe-dataset/images/${glyphData.imageId}.jpg`
         );
 
     glyph
@@ -65,7 +67,7 @@ function createGlyph(svgCanvas, glyphData) {
             d3
                 .arc()
                 .innerRadius(75)
-                .outerRadius(100)
+                .outerRadius(90)
                 .startAngle(0)
                 .endAngle(Math.PI * 2)
         )
@@ -77,8 +79,8 @@ function createGlyph(svgCanvas, glyphData) {
             "d",
             d3
                 .arc()
-                .innerRadius(100)
-                .outerRadius(120)
+                .innerRadius(90)
+                .outerRadius(100)
                 .startAngle(-0.5 * Math.PI)
                 .endAngle(0.5 * Math.PI)
         )
@@ -90,25 +92,25 @@ function createGlyph(svgCanvas, glyphData) {
             "d",
             d3
                 .arc()
-                .innerRadius(100)
-                .outerRadius(120)
+                .innerRadius(90)
+                .outerRadius(100)
                 .startAngle(0.5 * Math.PI)
                 .endAngle(1.5 * Math.PI)
         )
         .attr("fill", glyphData.colorC);
 
-    glyph
-        .append("path")
-        .attr(
-            "d",
-            d3
-                .arc()
-                .innerRadius(120)
-                .outerRadius(125)
-                .startAngle(0)
-                .endAngle(glyphData.objectFreq * 2 * Math.PI)
-        )
-        .attr("fill", primaryColor);
+    // glyph
+    //     .append("path")
+    //     .attr(
+    //         "d",
+    //         d3
+    //             .arc()
+    //             .innerRadius(120)
+    //             .outerRadius(125)
+    //             .startAngle(0)
+    //             .endAngle(glyphData.objectFreq * 2 * Math.PI)
+    //     )
+    //     .attr("fill", primaryColor);
 
     // glyph
     //     .append("line")
@@ -132,22 +134,14 @@ function createGlyph(svgCanvas, glyphData) {
     glyph
         .on("click", function () {
             svgCanvas.selectAll(".selected-glyph").attr("class", "glyph");
-            // .attr(
-            //     "transform",
-            //     `translate(${glyphData.x} ${glyphData.y}) scale(0.1)`
-            // );
-
             d3.select(this).attr("class", "glyph selected-glyph");
-            // .attr(
-            //     "transform",
-            //     `translate(${glyphData.x} ${glyphData.y}) scale(0.3)`
-            // );
-
             selectedImageId = glyphData.imageId;
+
             updateImageView();
             resetObjectFocus();
             updateColorView();
             updateColorSimilars();
+            updateHistory()
         })
         .on("mouseover", function () {
             d3.select(this)
@@ -156,7 +150,7 @@ function createGlyph(svgCanvas, glyphData) {
                 .duration(200)
                 .attr(
                     "transform",
-                    `translate(${glyphData.x} ${glyphData.y}) scale(0.5)`
+                    `translate(${glyphData.x} ${glyphData.y}) scale(0.8)`
                 );
         })
         .on("mouseout", function () {
@@ -173,83 +167,28 @@ function createGlyph(svgCanvas, glyphData) {
     return glyph;
 }
 
-function updateScatter() {
-    var scatterData = [];
-    const nData = Math.floor(Math.random() * 100);
-
-    for (i = 0; i < nData; i++) {
-        var glyphData = {
-            x: scatterX(Math.random()),
-            y: scatterY(Math.random()),
-            imageId: Math.floor(Math.random() * 170000),
-            era: Math.floor(Math.random() * 4),
-            objectId: Math.floor(Math.random() * 89) + 1,
-            objectFreq: Math.random(),
-            colorA: "#" + Math.floor(Math.random() * 16777215).toString(16),
-            colorB: "#" + Math.floor(Math.random() * 16777215).toString(16),
-            colorC: "#" + Math.floor(Math.random() * 16777215).toString(16),
-        };
-
-        glyph = createGlyph(scatterSvg, glyphData);
-        scatterData.push(glyphData);
-    }
-
-    // scatterSvg
-    //     .selectAll("image")
-    //     .data(scatterData)
-    //     .enter()
-    //     .append("image")
-    //     .attr("width", 40)
-    //     .attr("height", 40)
-    //     .attr("xlink:href", "static/images/test2.png")
-    //     .attr("x", function (d) {
-    //         return scatterX(d.x);
-    //     })
-    //     .attr("y", function (d) {
-    //         return scatterY(d.y);
-    //     })
-    //     .attr("style", "opacity: 0")
-    //     .on("mouseover", function () {
-    //         const scaleFactor = 7;
-    //         const centerX =
-    //             d3.select(this).attr("x") * (scaleFactor - 1) +
-    //             0.5 * d3.select(this).attr("width") * (scaleFactor - 1);
-    //         const centerY =
-    //             d3.select(this).attr("y") * (scaleFactor - 1) +
-    //             0.5 * d3.select(this).attr("height") * (scaleFactor - 1);
-
-    //         d3.select(this)
-    //             .moveToFront()
-    //             .transition()
-    //             .duration(200)
-    //             .attr(
-    //                 "transform",
-    //                 "translate(-" +
-    //                     centerX +
-    //                     " -" +
-    //                     centerY +
-    //                     ") scale(" +
-    //                     scaleFactor +
-    //                     ", " +
-    //                     scaleFactor +
-    //                     ")"
-    //             );
-    //     })
-    //     .on("mouseout", function () {
-    //         d3.select(this)
-    //             .transition()
-    //             .duration(200)
-    //             .attr("transform", "");
-    //     })
-    //     .on("click", function () {
-    //         selectedImage = 0;
-    //         updateImageView();
-    //         resetObjectFocus();
-    //     })
-    //     .transition()
-    //     .duration(500)
-    //     .delay(500)
-    //     .attr("style", "opacity: 1");
+function updateScatterView() {
+    getScatter(selectedDate, updateScatterCallback)
 }
 
-updateScatter();
+function updateScatterCallback(scatterData) {
+    scatterSvg.select("text").remove();
+    if (Object.keys(scatterData).length == 0) {
+        scatterSvg
+            .append("text")
+            .attr("x", scatterX(0.5))
+            .attr("y", scatterY(0.5))
+            .text("No Artworks Found for this Year")
+            .style("text-anchor", "middle")
+            .style("font-size", 2 * em2px)
+            .style("fill", secondaryColor);
+    }
+
+    for (i in scatterData) {
+        scatterData[i]["x"] = scatterX(scatterData[i]["x"])
+        scatterData[i]["y"] = scatterY(scatterData[i]["y"])
+        glyph = createGlyph(scatterSvg, scatterData[i]);
+    }
+}
+
+updateScatterView();

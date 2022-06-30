@@ -1,27 +1,26 @@
-import csv
-import functools
 import os
 import json
+import functools
 from typing import AnyStr
-COLOR_MATCHING = "app/data/color_matching.json"
-OBJECT_DETECTION_PANES = "app/data/total_panes.json"
-OBJECT_DETECTION_MATCHES = "app/data/matches.json"
-OBJECT_DETECTION = "app/data/object_detection.json"
-DATE_SLIDER = "app/data/date_features.json"
-IMAGE_METADATA = "app/data/color_matching.json"
-SCATTER_PLOT = "app/data/scatter_plot.json"
-META_DATA = "app/data/img-metadata.json"
-TIMELINE_DISTRIBUTION = "app/data/distr.json"
 
+TIMELINE = "app/data/timeline.json"
+SCATTER = "app/data/scatter.json"
+
+IMAGES = "app/data/images.json"
+IMAGES_OBJECTS = "app/data/images_objects.json"
+IMAGES_COLOR = "app/data/images_colors.json"
+
+OBJECTS = "app/data/objects.json"
+OBJECTS_MATCHES = "app/data/objects_matches.json"
 
 @functools.lru_cache()
-def read_date_from_json(filename=COLOR_MATCHING):
+def read_date_from_json(filename=SCATTER):
     with open(filename, 'r') as file:
         json_data = json.load(file)
     return json_data
 
 
-def get_data_by_id(id, file_name=COLOR_MATCHING):
+def get_data_by_id(id, file_name=SCATTER):
     """
     Pass an id and get the dictionary with all the info
     Keys from dict
@@ -29,14 +28,13 @@ def get_data_by_id(id, file_name=COLOR_MATCHING):
     """
     try:
         data = read_date_from_json(file_name)
-        val = data[id]
-        return val
+        return data.get(id, {})
     except KeyError as e:
         print(f"Key error - {e}")
         return {"Error": "Key error"}
 
 
-def get_all_data_keyval(keys:AnyStr, file_name=COLOR_MATCHING):
+def get_all_data_keyval(keys:AnyStr, file_name=SCATTER):
     """
     Gets all the matching rows from the given key
 
@@ -64,4 +62,4 @@ def get_all_data_keyval(keys:AnyStr, file_name=COLOR_MATCHING):
 
 
 if __name__ == '__main__':
-    print(get_data_by_id("0", DATE_SLIDER))
+    print(get_data_by_id("0", SCATTER))

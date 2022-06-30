@@ -15,6 +15,7 @@ function colorCardClick(newImage) {
     selectedImageId = newImage;
     updateImageView();
     updateColorView();
+    updateHistory()
 
     $(".selected-card").removeClass("selected-card");
     $(`#colorCard${newImage}`).addClass("selected-card");
@@ -27,33 +28,25 @@ function updateColorView() {
         },
         500
     );
-console.log("COLOR VIEW UPDATE BEFORE")
-//    Update here with the callback
-update_color_view(selectedImageId, colorViewCallback)
+
+    getImageColors(selectedImageId, colorViewCallback)
 }
 
-function colorViewCallback(colorData) {
-    console.log("COLOR VIEW UPDATE CALLBACK")
-    console.log(colorData)
-    var nData = Object.keys(colorData).length
-    console.log("Length of color objects", nData)
+function colorViewCallback(imageColorData) {
+
     var colors = [];
-    var i = 0;
-    var colorInfo = {};
-    for (color in colorData) {
-        console.log(colorData[color])
-        colorInfo[i] = parseInt(colorData[color]['%_dominance'])/100;
-        colors.push(colorData[color]['HEX']);
-        i++;
+    var colorData = {}
+    for (var i in imageColorData) {
+        colorData[i] = imageColorData[i][1]
+        colors.push(imageColorData[i][0])
     }
 
-    console.log("COLORS", colorInfo, colors)
-    var color = d3.scaleOrdinal().domain(colorInfo).range(colors);
+    var color = d3.scaleOrdinal().domain(colorData).range(colors);
     var pie = d3.pie().value(function (d) {
         return d.value;
     });
 
-    var data_ready = pie(d3.entries(colorInfo));
+    var data_ready = pie(d3.entries(colorData));
 
     colorSvg.selectAll(".prev-color-wheel").remove();
     colorSvg
@@ -101,8 +94,7 @@ function colorViewCallback(colorData) {
                 .duration(200)
                 .attr(
                     "transform",
-                    `translate(${colorWidth - 90} ${
-                        colorHeight / 2
+                    `translate(${colorWidth - 90} ${colorHeight / 2
                     }) scale(1.1)`
                 );
         })

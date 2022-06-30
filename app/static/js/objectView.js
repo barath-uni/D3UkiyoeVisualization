@@ -4,6 +4,7 @@ function objectCardClick(newImage) {
     resetObjectFocus();
     updateColorView();
     updateColorSimilars();
+    updateHistory()
 
     $(".selected-card").removeClass("selected-card");
     $(`#objectCard${newImage}`).addClass("selected-card");
@@ -13,21 +14,21 @@ function resetObjectFocus() {
     $("#objectStats").removeClass("popout-right");
 }
 
-function updateObjectView(paneId) {
-    $("#objectStats").html(
-        `
-        <div class='text-container'>
-            <p><b>Object Label</b>: Some Object</p>
-        </div>
-    `
-    );
+function updateObjectView() {
+    getObject(selectedPaneId, objectViewCallback);
+    getObjectMatches(selectedPaneId, objectViewMatchesCallback);
+}
 
-//    const paneId = Math.floor(Math.random() * 170000);
-    console.log("PaneID is", paneId)
+function objectViewCallback(objectData) {
+    $("#objectStats").html(
+        `<div class='text-container'>
+            <p><b>Object Label</b>: ${objectData["label"]}</p>
+        </div>
+    `);
 
     $("#objectStats").css(
         "background-image",
-        `url(https://storage.googleapis.com/ukiyoe-dataset/images/${paneId}.jpg`
+        `url(https://storage.googleapis.com/ukiyoe-dataset/panes/${selectedPaneId}.jpg`
     );
 
     $("#objectStats").addClass("popout-right");
@@ -37,12 +38,9 @@ function updateObjectView(paneId) {
         },
         500
     );
-    update_detected_matches(paneId, objectViewCallback)
 }
 
-function objectViewCallback(matchesData) {
-    total_matches = matchesData['matches_ids']
-    match_values = matchesData['matches_values']
+function objectViewMatchesCallback(objectMatchesData) {
     $("#objectSimilars")
         .children()
         .fadeOut()
@@ -50,33 +48,27 @@ function objectViewCallback(matchesData) {
         .done(function () {
             $("#objectSimilars").empty();
 
-            for (i = 0; i < total_matches.length; i++) {
-                const newImageId = total_matches[i];
-//                At present no use for Match Value, but can be included
-                console.log("Match Value = ", match_values[i])
-                update_meta_data(newImageId, objectMetaDataCallback)
+            for (var i in objectMatchesData) {
+                getImage(objectMatchesData[i], function (imageMetaData) {
+                    const imageId = imageMetaData['id']
+                    const title = imageMetaData['title']
+                    const artist = imageMetaData['artist']
+                    const era = imageMetaData['era']
+
+                    $("#objectSimilars").append(`
+                        <div id="objectCard${imageId}" class="similar-card similar-card-right" onClick=objectCardClick(${imageId})>
+                            <div class="similar-card-thumb">
+                                <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${imageId}.jpg">
+                            </div>
+                            <div class="similar-card-text">
+                                <p><b>Title:</b> ${title}</p>
+                                <p><b>Artist:</b> ${artist}</p>
+                                <p><b>Time:</b> ${era}</p>
+                            </div>
+                        </div>
+                    `);
+                });
             }
         });
-
-}
-
-function objectMetaDataCallback(metaData) {
-    imageId = metaData['id']
-    title = metaData['title']
-    artist = metaData['artist']
-    time = metaData['time']
-    $("#objectSimilars").append(`
-                    <div id="objectCard${imageId}" class="similar-card similar-card-right" onClick=objectCardClick(${imageId})>
-                        <div class="similar-card-thumb">
-                            <img src="https://storage.googleapis.com/ukiyoe-dataset/images/${imageId}.jpg">
-                        </div>
-                        <div class="similar-card-text">
-                            <p><b>Title</b>: ${title}</p>
-                            <p><b>Artist</b>: ${artist}</p>
-                            <p><b>Time</b>: ${time}</p>
-                        </div>
-                    </div>
-                `);
-
 
 }
