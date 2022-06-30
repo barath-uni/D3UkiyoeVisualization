@@ -2,6 +2,12 @@ var imageWidth = $("#imageView").width();
 var imageHeight = $("#imageView").height();
 var imageRatio = imageWidth / imageHeight;
 
+$("#fullImageView").hide();
+
+$(".hide-full-view").on("click", function () {
+    $("#fullImageView").hide();
+})
+
 var imageSvg = d3
     .select("#imageView")
     .append("svg")
@@ -27,7 +33,10 @@ function updateImageView(img_path = null) {
         .attr(
             "xlink:href",
             `${img_path}`
-        );
+        ).on("click", function () {
+            $("#fullImageView").show();
+            $("#fullImageViewImg").attr("src", `https://storage.googleapis.com/ukiyoe-dataset/images/${selectedImageId}.jpg`)
+        });
 
     getImage(selectedImageId, updateImage)
     getImageObjects(selectedImageId, updateImageObjects)
@@ -43,7 +52,6 @@ function updateImage(imageData) {
         <p><b>Era</b>: ${imageData["era"]}</p>
     `)
 }
-
 
 function updateImageObjects(imageObjectsData) {
     if (imageObjectsData == {}) {
@@ -77,10 +85,6 @@ function updateImageObjects(imageObjectsData) {
         .scaleLinear()
         .domain([0, origImageHeight])
         .range([rescaleY, rescaleY + rescaleHeight]);
-
-    // imageSvg.select("circle").remove()
-    // imageSvg.append("circle").attr("r", 10).attr("cx", rescaleX).attr("cy", rescaleY).style("fill", "black")
-    // imageSvg.append("circle").attr("r", 10).attr("cx", rescaleX + rescaleWidth).attr("cy", rescaleY + rescaleHeight).style("fill", "black")
 
     var boxData = [];
     for (i in imageObjectsData["panes"]) {

@@ -1,83 +1,81 @@
 <html>
-    <head>
-        <title>Boilerplate for Flask & D3</title>
-        <link
-            rel="stylesheet"
-            href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-        />
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-        <script src="https://d3js.org/d3.v5.min.js"></script>
+<head>
+    <title>Ukiyo-eXplorer</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
 
-        <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-dispatch@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-ease@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-selection@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-timer@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-transition@3"></script>
-        <script src="https://cdn.jsdelivr.net/npm/d3-drag@3"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 
-        <link rel="stylesheet" href="static/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-dispatch@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-ease@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-selection@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-timer@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-transition@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-drag@3"></script>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap"
-            rel="stylesheet"
-        />
-    </head>
+    <link rel="stylesheet" href="static/css/style.css" />
 
-    <body>
-        <div id="background">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
 
-        </div>
-        <div id="selectionHistory">
-            <p>Previously Selected</p>
-        </div>
-        <div class="header">
-            <h1>Ukiyo-eXplorer</h1>
-        </div>
-        <div class="app">
-            <div class="row" style="height: 80%">
-                <div
-                    class="col"
-                    style="width: calc(25% - 1em); margin-left: 1em"
-                >
-                    <div id="colorView"></div>
-                    <h3 id="colorSimilarsTitle">Prints with similar colors</h3>
-                    <div id="colorSimilars"></div>
-                </div>
-                <div class="col" style="width: 50%">
-                    <div id="imageContainer">
-                        <div id="metaView">
-                        </div>
-                        <div id="imageView"></div>
+<body>
+    <div id="background"></div>
+    <div id="fullImageView">
+        <div class="hide-full-view">Close</div>
+        <img id="fullImageViewImg">
+    </div>
+    <div id="selectionHistory">
+        <p>Previously Selected</p>
+    </div>
+    <div class="header">
+        <h1>《 Ukiyo-eXplorer 》</h1>
+    </div>
+    <div class="app">
+        <div class="row" style="height: 80%">
+            <div class="col" style="width: calc(25% - 1em); margin-left: 1em">
+                <div id="colorView"></div>
+                <h3 id="colorSimilarsTitle">Prints with similar colors</h3>
+                <div id="colorSimilars"></div>
+            </div>
+            <div class="col" style="width: 50%">
+                <h2 id="noImMessage">Click on a Glyph to Start Exploring</h2>
+                <div id="imageContainer">
+                    <div id="metaView">
                     </div>
-                    <div id="scatterView"></div>
+                    <div id="imageView">
+                    </div>
                 </div>
-                <div class="col" style="width: calc(25% - 1em)">
-                    <div id="objectStats"></div>
-                    <h3 id="objectSimilarsTitle">
-                        Prints with similar objects
-                    </h3>
-                    <div id="objectSimilars"></div>
-                </div>
+                <div id="scatterView"></div>
             </div>
-            <div class="row" style="height: 20%">
-                <div class="col" style="width: 100%">
-                    <div id="timelineView"></div>
-                </div>
+            <div class="col" style="width: calc(25% - 1em)">
+                <div id="objectStats"></div>
+                <h3 id="objectSimilarsTitle">
+                    Prints with similar objects
+                </h3>
+                <div id="objectSimilars"></div>
             </div>
         </div>
+        <div class="row" style="height: 20%">
+            <div class="col" style="width: 100%">
+                <div id="timelineView"></div>
+            </div>
+        </div>
+    </div>
 
-        <script type="text/javascript" src="static/js/viewManager.js"></script>
-        <script type="text/javascript" src="static/js/dashboard.js"></script>
-        <script type="text/javascript" src="static/js/imageView.js"></script>
-        <script type="text/javascript" src="static/js/objectView.js"></script>
-        <script type="text/javascript" src="static/js/colorView.js"></script>
-        <script type="text/javascript" src="static/js/scatterView.js"></script>
-        <script type="text/javascript" src="static/js/timelineView.js"></script>
-    </body>
+    <script type="text/javascript" src="static/js/viewManager.js"></script>
+    <script type="text/javascript" src="static/js/dashboard.js"></script>
+    <script type="text/javascript" src="static/js/imageView.js"></script>
+    <script type="text/javascript" src="static/js/objectView.js"></script>
+    <script type="text/javascript" src="static/js/colorView.js"></script>
+    <script type="text/javascript" src="static/js/scatterView.js"></script>
+    <script type="text/javascript" src="static/js/timelineView.js"></script>
+</body>
+
 </html>

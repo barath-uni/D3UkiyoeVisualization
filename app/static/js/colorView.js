@@ -122,7 +122,7 @@ function updateColorSimilars() {
         .done(function () {
             $("#colorSimilars").empty();
 
-            for (i = 0; i < 25; i++) {
+            for (i = 0; i < 10; i++) {
                 const newImageId = Math.floor(Math.random() * 170000);
 
                 $("#colorSimilars").append(`

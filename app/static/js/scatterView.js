@@ -137,6 +137,8 @@ function createGlyph(svgCanvas, glyphData) {
             d3.select(this).attr("class", "glyph selected-glyph");
             selectedImageId = glyphData.imageId;
 
+            $("#noImMessage").hide();
+
             updateImageView();
             resetObjectFocus();
             updateColorView();

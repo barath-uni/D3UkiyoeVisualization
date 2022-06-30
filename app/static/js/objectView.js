@@ -63,7 +63,7 @@ function objectViewMatchesCallback(objectMatchesData) {
                             <div class="similar-card-text">
                                 <p><b>Title:</b> ${title}</p>
                                 <p><b>Artist:</b> ${artist}</p>
-                                <p><b>Time:</b> ${era}</p>
+                                <p><b>Era:</b> ${era}</p>
                             </div>
                         </div>
                     `);
