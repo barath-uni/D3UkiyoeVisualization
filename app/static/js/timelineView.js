@@ -73,9 +73,6 @@ function updateTimelineView(timelineData) {
 
         const xCenter = parseInt((eraDates[i - 1] + eraDates[i]) * 0.5);
 
-        console.log(eraNames[i - 1])
-        console.log(xCenter)
-
         timelineSvg
             .append("text")
             .style("fill", secondaryColor)
@@ -120,7 +117,10 @@ function updateTimelineView(timelineData) {
             .data(data)
             .enter()
             .append("rect")
-            .style("stroke", backgroundColor)
+            .style("stroke", function(d) {
+                if (d.x == 1850) return "#FFD700";
+                return backgroundColor
+            })
             .style("stroke-width", 1)
             .attr("x", function (d) {
                 return timelineX(d.x);
